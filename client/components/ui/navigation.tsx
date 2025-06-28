@@ -63,25 +63,41 @@ export function Navigation({ userRole = "guest", userName }: NavigationProps) {
               <>
                 <Link
                   to="/jobs"
-                  className="text-gray-600 hover:text-orange-600 transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    isActive("/jobs")
+                      ? "text-orange-600"
+                      : "text-gray-600 hover:text-orange-600"
+                  }`}
                 >
                   Jobs
                 </Link>
                 <Link
                   to="/companies"
-                  className="text-gray-600 hover:text-orange-600 transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    isActive("/companies")
+                      ? "text-orange-600"
+                      : "text-gray-600 hover:text-orange-600"
+                  }`}
                 >
                   Companies
                 </Link>
                 <Link
                   to="/cv-analysis"
-                  className="text-gray-600 hover:text-orange-600 transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    isActive("/cv-analysis")
+                      ? "text-orange-600"
+                      : "text-gray-600 hover:text-orange-600"
+                  }`}
                 >
                   CV Analysis
                 </Link>
                 <Link
                   to="/jd-analysis-demo"
-                  className="text-gray-600 hover:text-orange-600 transition-colors"
+                  className={`text-sm font-medium transition-colors ${
+                    isActive("/jd-analysis-demo")
+                      ? "text-orange-600"
+                      : "text-gray-600 hover:text-orange-600"
+                  }`}
                 >
                   JD Analysis
                 </Link>

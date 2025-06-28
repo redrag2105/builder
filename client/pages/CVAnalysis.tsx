@@ -149,14 +149,23 @@ export default function CVAnalysis() {
     setIsAnalyzing(false);
   };
 
-  const findMatchingJobs = (role: string) => {
-    // Navigate to jobs page with filters
-    navigate(`/jobs?role=${encodeURIComponent(role)}`);
+  const findMatchingJobs = (role: string, skills: string[]) => {
+    // Navigate to jobs page with filters based on CV analysis
+    const params = new URLSearchParams();
+    params.set("role", role);
+    params.set("skills", skills.join(","));
+    navigate(`/jobs?${params.toString()}`);
   };
 
-  const findMatchingCompanies = (companies: string[]) => {
-    // Navigate to companies page with filters
-    navigate(`/companies?suggested=${companies.join(",")}`);
+  const findAllMatchingJobs = () => {
+    // Navigate to jobs page with all analysis data
+    if (!analysisResult) return;
+
+    const params = new URLSearchParams();
+    params.set("skills", analysisResult.skills.join(","));
+    params.set("experience", analysisResult.experience);
+    params.set("industries", analysisResult.industries.join(","));
+    navigate(`/jobs?${params.toString()}`);
   };
 
   return (
@@ -429,15 +438,19 @@ export default function CVAnalysis() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => findMatchingJobs(role.title)}
+                          onClick={() =>
+                            findMatchingJobs(role.title, analysisResult.skills)
+                          }
                         >
                           View Jobs
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => findMatchingCompanies(role.companies)}
+                          onClick={() =>
+                            findMatchingJobs(role.title, analysisResult.skills)
+                          }
                         >
-                          Find Companies
+                          Find Jobs
                           <ArrowRight className="w-4 h-4 ml-1" />
                         </Button>
                       </div>
@@ -527,7 +540,14 @@ export default function CVAnalysis() {
                 >
                   Analyze Another CV
                 </Button>
-                <Button>
+                <Button
+                  onClick={findAllMatchingJobs}
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                >
+                  <Target className="w-4 h-4 mr-2" />
+                  Find All Matching Jobs
+                </Button>
+                <Button variant="outline">
                   <Download className="w-4 h-4 mr-2" />
                   Download Report
                 </Button>

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Navigation } from "../components/ui/navigation";
 import { JobCard } from "../components/ui/job-card";
 import { Button } from "../components/ui/button";
@@ -205,11 +206,27 @@ const allJobs = [
 ];
 
 export default function Jobs() {
+  const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedSalary, setSelectedSalary] = useState("");
   const [bookmarkedJobs, setBookmarkedJobs] = useState<string[]>([]);
+
+  // Handle URL parameters from CV analysis
+  useEffect(() => {
+    const roleParam = searchParams.get("role");
+    const skillsParam = searchParams.get("skills");
+    const experienceParam = searchParams.get("experience");
+
+    if (roleParam) {
+      setSearchQuery(roleParam);
+    } else if (skillsParam) {
+      // Use first skill as search query if no specific role
+      const skills = skillsParam.split(",");
+      setSearchQuery(skills[0] || "");
+    }
+  }, [searchParams]);
 
   const handleBookmark = (jobId: string) => {
     setBookmarkedJobs((prev) =>
@@ -252,7 +269,9 @@ export default function Jobs() {
               Find Your Next Job
             </h1>
             <p className="text-gray-600 mb-6">
-              Discover opportunities that match your skills and career goals
+              {searchParams.get("role") || searchParams.get("skills")
+                ? "Jobs matching your CV analysis results"
+                : "Discover opportunities that match your skills and career goals"}
             </p>
 
             {/* Search Form */}

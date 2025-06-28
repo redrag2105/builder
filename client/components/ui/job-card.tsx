@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Badge } from "./badge";
 import { Button } from "./button";
 import { Card, CardContent, CardFooter, CardHeader } from "./card";
@@ -41,6 +42,15 @@ export function JobCard({
   onBookmark,
   onApply,
 }: JobCardProps) {
+  const navigate = useNavigate();
+
+  const handleApply = () => {
+    if (onApply) {
+      onApply(id);
+    } else {
+      navigate(`/jobs/${id}/apply`);
+    }
+  };
   return (
     <Card className="hover:shadow-lg transition-all duration-300 border-l-4 border-l-transparent hover:border-l-orange-500 group">
       <CardHeader className="pb-3">
@@ -135,7 +145,7 @@ export function JobCard({
           </Button>
           <Button
             size="sm"
-            onClick={() => onApply?.(id)}
+            onClick={handleApply}
             className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
           >
             Apply Now
